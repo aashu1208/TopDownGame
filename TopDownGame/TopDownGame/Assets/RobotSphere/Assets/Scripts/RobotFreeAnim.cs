@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class RobotFreeAnim : MonoBehaviour {
 
@@ -8,11 +9,22 @@ public class RobotFreeAnim : MonoBehaviour {
 	float rotSpeed = 40f;
 	Animator anim;
 
+	NavMeshAgent navAgent;
+
+	//target pos. to move towards
+	Vector3 targetPostion;
+
+	//speed of movement
+	float moveSpeed = 5f;
+
 	// Use this for initialization
 	void Awake()
 	{
 		anim = gameObject.GetComponent<Animator>();
 		gameObject.transform.eulerAngles = rot;
+
+		//Initializing navmeshagent
+		navAgent = GetComponent<NavMeshAgent>();
 	}
 
 	// Update is called once per frame
@@ -24,15 +36,32 @@ public class RobotFreeAnim : MonoBehaviour {
 
 	void CheckKey()
 	{
+
+        if (Input.GetMouseButtonDown(0))
+        {
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+				//set the target position for navmeshagent
+				MovetoPosition(hit.point);
+            }
+        }
+
+
+		//walk animation control
+		anim.SetBool("Walk_Anim", navAgent.velocity.magnitude > 1.0f);
+
 		// Walk
-		if (Input.GetKey(KeyCode.W))
+		/*if (Input.GetKey(KeyCode.W))
 		{
 			anim.SetBool("Walk_Anim", true);
 		}
 		else if (Input.GetKeyUp(KeyCode.W))
 		{
 			anim.SetBool("Walk_Anim", false);
-		}
+		}*/
 
 		// Rotate Left
 		if (Input.GetKey(KeyCode.A))
@@ -72,5 +101,12 @@ public class RobotFreeAnim : MonoBehaviour {
 			}
 		}
 	}
+
+	public void MovetoPosition(Vector3 targetPosition)
+    {
+
+		//use navmeshagent to move to the target position
+		navAgent.SetDestination(targetPosition);
+    }
 
 }
