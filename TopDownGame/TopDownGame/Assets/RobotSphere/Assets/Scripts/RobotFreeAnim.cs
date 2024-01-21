@@ -11,12 +11,6 @@ public class RobotFreeAnim : MonoBehaviour {
 
 	NavMeshAgent navAgent;
 
-	//target pos. to move towards
-	Vector3 targetPostion;
-
-	//speed of movement
-	float moveSpeed = 5f;
-
 	// Use this for initialization
 	void Awake()
 	{
