@@ -20,9 +20,13 @@ public class RobotFreeAnim : MonoBehaviour {
 		//Initializing navmeshagent
 		navAgent = GetComponent<NavMeshAgent>();
 	}
+    private void OnEnable()
+    {
+		Debug.Log("enable");
+    }
 
-	// Update is called once per frame
-	void Update()
+    // Update is called once per frame
+    void Update()
 	{
 		CheckKey();
 		gameObject.transform.eulerAngles = rot;
